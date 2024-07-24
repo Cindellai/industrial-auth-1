@@ -1,7 +1,5 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: %i[show edit update destroy]
-  before_action :is_an_authorized_user_for_destroy, only: [:destroy]
-  before_action :is_an_authorized_user_for_create, only: [:create]
   # Authorizes @comment if it exists; otherwise, authorizes the Comment class
   before_action { authorize(@comment || Comment) }
 
@@ -68,16 +66,9 @@ class CommentsController < ApplicationController
       @comment = Comment.find(params[:id])
     end
 
-    def is_an_authorized_user_for_destroy
-      @photo = @comment.photo
-      if current_user != @photo.owner && @photo.owner.private? && !current_user.leaders.include?(@photo.owner)
-        redirect_back fallback_location: root_url, alert: "Not authorized"
-      end
-    end
-
-    def is_an_authorized_user_for_create
-      @photo = Photo.find(params[:comment][:photo_id])
-      if current_user != @photo.owner && @photo.owner.private? && !current_user.leaders.include?(@photo.owner)
+    def authorize_user_for_comment
+      @photo = params[:action] == 'create' ? Photo.find(params[:comment][:photo_id]) : @comment.photo
+      unless current_user == @photo.owner || !@photo.owner.private? || current_user.leaders.include?(@photo.owner)
         redirect_back fallback_location: root_url, alert: "Not authorized"
       end
     end

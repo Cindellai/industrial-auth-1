@@ -7,7 +7,7 @@ class FollowRequestPolicy
   end
 
   def create?
-    follow_request.sender == user
+    true
   end
 
   def update?
