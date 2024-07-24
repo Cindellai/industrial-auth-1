@@ -7,17 +7,19 @@
       <h5 class="mt-0">
         <%= link_to comment.author.username, user_path(comment.author.username), class: "text-dark link-underline-dark link-underline link-underline-opacity-0 link-underline-opacity-100-hover" %>
       </h5>
+      console.log("this is working")
       <p><%= comment.body %></p>
     </div>
-    <div>
-     <% if current_user == comment.author %>
-      <%= link_to edit_comment_path(comment), class: "btn btn-link btn-sm text-muted" do %>
-        <i class="fas fa-edit fa-fw"></i>
-      <% end %>
 
-      <%= link_to comment, data: { turbo_method: :delete }, class: "btn btn-link btn-sm text-muted" do %>
-        <i class="fas fa-trash fa-fw"></i>
-      <% end %>
+    <div>
+      <% if current_user == comment.author %>
+        <%= link_to edit_comment_path(comment), class: "btn btn-link btn-sm text-muted" do %>
+          <i class="fas fa-edit fa-fw"></i>
+        <% end %>
+
+        <%= link_to comment, data: { turbo_method: :delete }, class: "btn btn-link btn-sm text-muted" do %>
+          <i class="fas fa-trash fa-fw"></i>
+        <% end %>      
       <% end %>
     </div>
   </div>

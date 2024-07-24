@@ -1,6 +1,7 @@
 class CommentsController < ApplicationController
-  before_action :set_comment, only: %i[ show edit update destroy ]
-  before_action :is_an_authorized_user, only: [:destroy, :create]
+  before_action :set_comment, only: %i[show edit update destroy]
+  # Authorizes @comment if it exists; otherwise, authorizes the Comment class
+  before_action { authorize(@comment || Comment) }
 
   # GET /comments or /comments.json
   def index
@@ -59,14 +60,15 @@ class CommentsController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_comment
       @comment = Comment.find(params[:id])
     end
 
-    def is_an_authorized_user
-      @photo = Photo.find(params.fetch(:comment).fetch(:photo_id))
-      if current_user != @photo.owner && @photo.owner.private? && !current_user.leaders.include?(@photo.owner)
+    def authorize_user_for_comment
+      @photo = params[:action] == 'create' ? Photo.find(params[:comment][:photo_id]) : @comment.photo
+      unless current_user == @photo.owner || !@photo.owner.private? || current_user.leaders.include?(@photo.owner)
         redirect_back fallback_location: root_url, alert: "Not authorized"
       end
     end
