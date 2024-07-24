@@ -12,6 +12,10 @@ class ApplicationPolicy
     false
   end
 
+  def feed?
+    true
+  end
+
   def show?
     false
   end

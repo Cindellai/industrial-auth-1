@@ -7,7 +7,7 @@ class FollowRequestPolicy
   end
 
   def create?
-    true
+    follow_request.sender == user
   end
 
   def update?
@@ -15,7 +15,15 @@ class FollowRequestPolicy
   end
 
   def destroy?
-    user == follow_request.sender || user == follow_request.recipient
+    update?
+  end
+
+#was missing methods:
+  def show?
+    true
+  end
+
+  def edit?
+    update?
   end
 end
-

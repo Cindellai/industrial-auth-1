@@ -7,7 +7,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def show?
-    user == current_user || !user.private? || user.followers.include?(current_user)
+    true
   end
 
   def liked?
@@ -31,6 +31,6 @@ class UserPolicy < ApplicationPolicy
   end
 
   def show_photos?
-    show? || current_user.followers.include?(user)
+    user == current_user || !user.private? || user.followers.include?(current_user)
   end
 end

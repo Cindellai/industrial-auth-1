@@ -1,32 +1,20 @@
 class CommentPolicy < ApplicationPolicy
-  attr_reader :current_user, :comment
+  attr_reader :user, :comment
 
-  def initialize(current_user, comment)
-    @current_user = current_user
+  def initialize(user, comment)
+    @user = user
     @comment = comment
-  end
-
-  def show?
-    true
-  end
-
-  def new?
-    true
   end
 
   def create?
     true
   end
 
-  def edit?
-    current_user == comment.author
-  end
-
   def update?
-    current_user == comment.author
+    user == comment.author
   end
 
   def destroy?
-    current_user == comment.author
-  end
+    update?
+end
 end

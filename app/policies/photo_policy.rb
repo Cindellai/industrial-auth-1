@@ -10,9 +10,7 @@ class PhotoPolicy < ApplicationPolicy
   #   of the owner, unless the owner is not private in which case anyone can
   #   see it
   def show?
-    user == photo.owner ||
-      !photo.owner.private? ||
-      photo.owner.followers.include?(user)
+    user == photo.owner || !photo.owner.private? || photo.owner.followers.include?(user)
   end
 
   def new?
@@ -28,10 +26,10 @@ class PhotoPolicy < ApplicationPolicy
   end
 
   def edit?
-    user == photo.owner
+    update?
   end
 
   def destroy?
-    user == photo.owner
+    update?
   end
 end
